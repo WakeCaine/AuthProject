@@ -1,0 +1,13 @@
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\bin\Debug\AuthClient.exe.config
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\bin\Debug\AuthClient.exe
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\bin\Debug\AuthClient.pdb
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\MainWindow.baml
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\MainWindow.g.cs
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\App.g.cs
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient_MarkupCompile.cache
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.g.resources
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.Properties.Resources.resources
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.csproj.GenerateResource.Cache
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.exe
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.pdb
+c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.csprojResolveAssemblyReference.cache
