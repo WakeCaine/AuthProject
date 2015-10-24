@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane minHeight="500.0" minWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.auth.server.main.MainController">
+   <children>
+      <Button fx:id="connectBox" layoutX="216.0" layoutY="14.0" mnemonicParsing="false" onAction="#connectBoxAction" text="START" />
+      <TextField fx:id="statusBox" layoutX="55.0" layoutY="14.0" />
+      <Text layoutX="11.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATUS:" AnchorPane.rightAnchor="250.08984375" />
+   </children>
+</AnchorPane>
