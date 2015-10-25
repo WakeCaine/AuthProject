@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane minHeight="500.0" minWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.auth.server.main.MainController">
+<AnchorPane minHeight="500.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.auth.server.main.MainController">
    <children>
       <Button fx:id="connectBox" layoutX="216.0" layoutY="14.0" mnemonicParsing="false" onAction="#connectBoxAction" text="START" />
       <TextField fx:id="statusBox" layoutX="55.0" layoutY="14.0" />
-      <Text layoutX="11.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATUS:" AnchorPane.rightAnchor="250.08984375" />
+      <Text layoutX="11.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATUS:" />
+      <TextArea fx:id="databaseLog" layoutY="57.0" minHeight="100.0" minWidth="100.0" prefHeight="102.0" prefWidth="116.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
    </children>
 </AnchorPane>
