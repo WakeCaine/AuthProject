@@ -19,7 +19,7 @@ public class KnockKnockProtocol {
 		String theOutput = null;
 
 		if (state == WAITING) {
-			theOutput = "1";
+			theOutput = "|5READY";
 			state = SENTKNOCKKNOCK;
 		} else if (state == SENTKNOCKKNOCK) {
 			if (theInput.equalsIgnoreCase("Who's there?")) {

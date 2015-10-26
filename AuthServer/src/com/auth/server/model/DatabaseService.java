@@ -4,18 +4,11 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.Statement;
 import java.util.UUID;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import com.auth.server.mail.MailSender;
 
@@ -59,10 +52,12 @@ public class DatabaseService {
         prepStmt2.executeBatch();
         conn2.commit();
         databaseLog.appendText("Time2: " + (System.currentTimeMillis() - start) + "\n");
-        conn2.close();*/UUID lol = UUID.randomUUID();
+        conn2.close();*/
+        
+        UUID lol = UUID.randomUUID();
         String hash = MD5("userReg201510251" + lol.toString());
         databaseLog.appendText("Created HASH: " + hash + " " + "\n");
-        MailSender.SendEmail(hash);
+        /*MailSender.SendEmail(hash);*/
 	}
 	
 	public Connection getConnection(){

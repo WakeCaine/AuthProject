@@ -49,9 +49,9 @@ public class MyConnection extends Thread {
 			while (true) {
 				while ((inputLine = in.readLine()) != null) {
 					System.out.println("\"" + inputLine + "\"");
-					if (inputLine.equals("Bye")) {
+					if (inputLine.equals("BYE")) {
 						statusBox.setText("CLOSED CONNECTION");
-						out.println("Bye");
+						out.println("|3BYE");
 						System.out.println("Closed");
 						break;
 					}
