@@ -23,6 +23,9 @@ namespace AuthClient
         byte[] bytes = new byte[1024];
         Socket senderSock;
 
+        //Information about current connection
+        Connection con;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -69,6 +72,8 @@ namespace AuthClient
                 Send_Button.IsEnabled = true;
             }
             catch (Exception exc) { MessageBox.Show(exc.ToString()); }
+            con = new Connection();
+            con.setStatus(Status.CONNECTED);
             ReceiveDataFromServer();
         }
 
@@ -111,21 +116,22 @@ namespace AuthClient
 
                 tbReceivedMsg.Text = "The server reply: " + "\"" + theMessageToReceive.Substring(0, theMessageToReceive.Length - 2) + "\"";
 
-                if (theMessageToReceive.Substring(0,theMessageToReceive.Length-2) == "Bye")
-                {
-                    
-                    // Disables sends and receives on a Socket. 
-                    senderSock.Shutdown(SocketShutdown.Both);
+                analyzeMessage(theMessageToReceive.Substring(0, theMessageToReceive.Length - 2));
 
-                    //Closes the Socket connection and releases all resources 
-                    senderSock.Close();
+                //if (theMessageToReceive.Substring(0,theMessageToReceive.Length-2) == "BYE")
+                //{
+                //    // Disables sends and receives on a Socket. 
+                //    senderSock.Shutdown(SocketShutdown.Both);
 
-                    tbStatus.Text = "Disconnected";
-                    tbReceivedMsg.Text = "Disconnected";
-                    Disconnect_Button.IsEnabled = false;
-                    Connect_Button.IsEnabled = true;
-                    Send_Button.IsEnabled = false;
-                }
+                //    //Closes the Socket connection and releases all resources 
+                //    senderSock.Close();
+
+                //    tbStatus.Text = "Disconnected";
+                //    tbReceivedMsg.Text = "Disconnected";
+                //    Disconnect_Button.IsEnabled = false;
+                //    Connect_Button.IsEnabled = true;
+                //    Send_Button.IsEnabled = false;
+                //}
             }
             catch (Exception exc) { MessageBox.Show(exc.ToString()); }
         }
@@ -158,6 +164,42 @@ namespace AuthClient
             char[] chars = new char[bytes.Length / sizeof(char)];
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
+        }
+
+        public void analyzeMessage(String message)
+        {
+            Status localStatus = con.getAnswer(message);
+
+            if (localStatus == Status.CONNECTED && con.getStatus() == Status.CONNECTED)
+            {
+                tbReceivedMsg.Text = "CONNECTED";
+                loginBox.IsEnabled = true;
+                passwordBox.IsEnabled = true;
+                checkRegister.IsEnabled = true;
+            }
+            else if (localStatus == Status.BYE && con.getStatus() == Status.CONNECTED)
+            {
+                // Disables sends and receives on a Socket. 
+                senderSock.Shutdown(SocketShutdown.Both);
+
+                //Closes the Socket connection and releases all resources 
+                senderSock.Close();
+
+                tbStatus.Text = "Disconnected";
+                tbReceivedMsg.Text = "Disconnected";
+                Disconnect_Button.IsEnabled = false;
+                Connect_Button.IsEnabled = true;
+                Send_Button.IsEnabled = false;
+            }
+            else if (localStatus == Status.MALFORMED)
+            {
+                tbReceivedMsg.Text = "MALFORMED CONNECTION OR INTERNAL SERVER ERROR\nTURN OFF APPLICATION";
+            }
+        }
+
+        private void Register_Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
