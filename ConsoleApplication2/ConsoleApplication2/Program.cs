@@ -63,6 +63,11 @@ class Alice
 
     }
 
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /* !-----------------------------TUTAJ JEST AES I SZYFROWANIE---------------------------*/
     private static void Send(byte[] key, string secretMessage, out byte[] encryptedMessage, out byte[] iv)
     {
         using (Aes aes = new AesCryptoServiceProvider())
@@ -71,6 +76,7 @@ class Alice
             iv = aes.IV;
 
             // Encrypt the message
+            //uwaga uwaga szyfrowanie :D
             using (MemoryStream ciphertext = new MemoryStream())
             using (CryptoStream cs = new CryptoStream(ciphertext, aes.CreateEncryptor(), CryptoStreamMode.Write))
             {
@@ -100,6 +106,12 @@ public class Bob
         }
     }
 
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /* !-----------------------------TUTAJ JEST AES I DESZYFROWANIE---------------------------*/
+
     public void Receive(byte[] encryptedMessage, byte[] iv)
     {
 
@@ -108,13 +120,14 @@ public class Bob
             aes.Key = bobKey;
             aes.IV = iv;
             // Decrypt the message
+            //deszyfrowanie
             using (MemoryStream plaintext = new MemoryStream())
             {
                 using (CryptoStream cs = new CryptoStream(plaintext, aes.CreateDecryptor(), CryptoStreamMode.Write))
                 {
                     cs.Write(encryptedMessage, 0, encryptedMessage.Length);
                     cs.Close();
-                    string message = Encoding.UTF8.GetString(plaintext.ToArray());
+                    string message = Encoding.UTF8.GetString(plaintext.ToArray()); //<----- odszyfrowana wiadomość
                     Console.WriteLine(message);
                 }
             }
