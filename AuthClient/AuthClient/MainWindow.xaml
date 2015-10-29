@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Client Socket" Height="553" Width="700">
-    <Grid Background="#FFD7CBFD">
+    <Grid Background="Pink">
         <TextBox x:Name="tbMsg" HorizontalAlignment="Left" Height="124" Margin="60,83,0,0" TextWrapping="Wrap" Text="This message will be send to the server side socket." VerticalAlignment="Top" Width="222" BorderThickness="3"/>
         <Button Name="Connect_Button" Content="Connect to server" HorizontalAlignment="Left" Margin="60,35,0,0" VerticalAlignment="Top" Width="120" Click="Connect_Click" Background="Black" Foreground="White"/>
         <TextBlock x:Name="tbStatus" HorizontalAlignment="Left" Margin="209,10,0,0" TextWrapping="Wrap" Text="Not connected" VerticalAlignment="Top" Width="132" Height="73"/>
