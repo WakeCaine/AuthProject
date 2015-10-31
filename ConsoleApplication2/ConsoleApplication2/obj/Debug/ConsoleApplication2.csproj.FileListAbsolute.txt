@@ -10,14 +10,5 @@ C:\Users\Laura\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplicati
 C:\Users\Laura\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
 C:\Users\Laura\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
 C:\Users\Laura\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
-<<<<<<< HEAD
-=======
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe.config
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.exe
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
-C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
 C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\BouncyCastle.Crypto.dll
 C:\Users\Shaker\Documents\GitHub\AuthProject\ConsoleApplication2\ConsoleApplication2\bin\Debug\BouncyCastle.Crypto.pdb
->>>>>>> modifications
