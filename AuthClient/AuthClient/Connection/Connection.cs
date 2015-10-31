@@ -10,6 +10,7 @@ namespace AuthClient
     {
         IDLE,
         CONNECTED,
+        CONFIRM,
         REGISTERED,
         LOGIN,
         LOGGED,
@@ -56,6 +57,11 @@ namespace AuthClient
                     return Status.LOGGED;
                 else
                     return Status.ERROR;
+            }
+            else if (cutmessage == "KEY")
+            {
+                ;
+                return Status.CONFIRM;
             }
             else if (cutmessage == "OKREG" || cutmessage == "NOREG")
             {

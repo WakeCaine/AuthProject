@@ -11,3 +11,16 @@ c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\
 c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.exe
 c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.pdb
 c:\users\shakecaine\documents\visual studio 2012\Projects\AuthClient\AuthClient\obj\Debug\AuthClient.csprojResolveAssemblyReference.cache
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\bin\Debug\AuthClient.exe.config
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.exe
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.pdb
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\bin\Debug\AuthClient.exe
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\bin\Debug\AuthClient.pdb
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.csprojResolveAssemblyReference.cache
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\MainWindow.baml
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\MainWindow.g.cs
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\App.g.cs
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient_MarkupCompile.cache
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.g.resources
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.Properties.Resources.resources
+C:\Users\Shaker\Documents\GitHub\AuthProject\AuthClient\AuthClient\obj\Debug\AuthClient.csproj.GenerateResource.Cache
