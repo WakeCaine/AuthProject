@@ -29,6 +29,7 @@ namespace AuthClient
         public MainWindow()
         {
             InitializeComponent();
+            dataBox.Text = "";
         }
 
         private void Connect_Click(object sender, RoutedEventArgs e)
@@ -176,6 +177,25 @@ namespace AuthClient
                 loginBox.IsEnabled = true;
                 passwordBox.IsEnabled = true;
                 checkRegister.IsEnabled = true;
+                emailBox.IsEnabled = true;
+                loginButton.IsEnabled = true;
+                keyBox.IsEnabled = true;
+            }
+            else if (localStatus == Status.CONFIRM)
+            {
+                dataBox.AppendText("Check email for info about your key to register!\n");
+                con.setStatus(Status.CONFIRM);
+            }
+            else if (con.getStatus() == Status.CONFIRM && (localStatus == Status.ERROR || localStatus == Status.REGISTERED))
+            {
+                if(localStatus == Status.REGISTERED)
+                {
+                    dataBox.Text = "REGISTRATION SUCCESSFUL!";
+                }
+                else
+                {
+                    dataBox.Text = "SOMETHING WENT WRONG!";
+                }
             }
             else if (localStatus == Status.BYE && con.getStatus() == Status.CONNECTED)
             {
@@ -190,6 +210,13 @@ namespace AuthClient
                 Disconnect_Button.IsEnabled = false;
                 Connect_Button.IsEnabled = true;
                 Send_Button.IsEnabled = false;
+
+                loginBox.IsEnabled = false;
+                passwordBox.IsEnabled = false;
+                checkRegister.IsEnabled = false;
+                emailBox.IsEnabled = false;
+                loginButton.IsEnabled = false;
+                keyBox.IsEnabled = false;
             }
             else if (localStatus == Status.MALFORMED)
             {
@@ -199,7 +226,50 @@ namespace AuthClient
 
         private void Register_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (con.getStatus() == Status.CONFIRM)
+            {
+                String message = "|3KEY" + "|KEY" + keyBox.Text;
+                byte[] msg = Encoding.ASCII.GetBytes(message + "\n");
 
+                // Sends data to a connected Socket. 
+                int bytesSend = senderSock.Send(msg);
+
+                ReceiveDataFromServer();
+            }
+            else if (checkRegister.IsChecked == false)
+            {
+                String message = "|5LOGIN" + "|" + loginBox.Text.Length + "USR" + loginBox.Text + "|" + passwordBox.Text.Length + "PASS" + passwordBox.Text;
+                byte[] msg = Encoding.ASCII.GetBytes(message + "\n");
+
+                // Sends data to a connected Socket. 
+                int bytesSend = senderSock.Send(msg);
+
+                ReceiveDataFromServer();
+            }
+            else
+            {
+                String message = "|8REGISTER" + "|" + loginBox.Text.Length + "USR" + loginBox.Text + "|" + passwordBox.Text.Length + "PASS" + passwordBox.Text + "|EMAIL" + emailBox.Text;
+                byte[] msg = Encoding.ASCII.GetBytes(message + "\n");
+
+                // Sends data to a connected Socket. 
+                int bytesSend = senderSock.Send(msg);
+
+                ReceiveDataFromServer();
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+
+                // Disables sends and receives on a Socket. 
+                senderSock.Shutdown(SocketShutdown.Both);
+
+                //Closes the Socket connection and releases all resources 
+                senderSock.Close();
+            }
+            catch (Exception exc) { MessageBox.Show(exc.ToString()); }
         }
     }
 }

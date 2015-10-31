@@ -33,6 +33,7 @@ public class MainController implements Initializable {
 	@FXML
 	public TextArea textText;
 	
+	
 	DatabaseService database;
 
 	MyConnection my;
@@ -63,7 +64,7 @@ public class MainController implements Initializable {
 			e.printStackTrace();
 		}
 		statusBox.setText("STARTING...");
-		my = new MyConnection(statusBox);
+		my = new MyConnection(statusBox , databaseLog, database);
 		my.start();
 	}
 
