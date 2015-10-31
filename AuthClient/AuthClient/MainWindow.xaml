@@ -1,15 +1,9 @@
 ﻿<Window x:Class="AuthClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-<<<<<<< HEAD
         Title="Client Socket" Height="553" Width="700">
-    <Grid Background="Pink">
-=======
-        Title="Client Socket" Height="553" Width="700"
-        Closing="Window_Closing">
     <Grid Background="#FFD7CBFD">
         <!--Debug-->
->>>>>>> final
         <TextBox x:Name="tbMsg" HorizontalAlignment="Left" Height="124" Margin="60,83,0,0" TextWrapping="Wrap" Text="This message will be send to the server side socket." VerticalAlignment="Top" Width="222" BorderThickness="3"/>
         <Button Name="Send_Button" Content="Send message" HorizontalAlignment="Left" Margin="60,212,0,0" VerticalAlignment="Top" Width="120" Click="Send_Click" Foreground="#FFF9F9F9" Background="Black"/>
         <Button x:Name="Disconnect_Button" Content="Disconnect" HorizontalAlignment="Left" Margin="60,462,0,0" VerticalAlignment="Top" Width="120" Click="Disconnect_Click" Foreground="#FFF9F9F9" Background="Black"/>
