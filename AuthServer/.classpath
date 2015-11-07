@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="res/libraries/activation.jar"/>
 	<classpathentry kind="lib" path="res/libraries/mail.jar"/>
 	<classpathentry kind="lib" path="res/libraries/sqlite-jdbc-3.8.11.2.jar" sourcepath="res/libraries/sqlite-jdbc-3.8.11.2-sources.jar"/>
+	<classpathentry kind="lib" path="res/libraries/sqlite-jdbc-3.8.11.2-sources.jar"/>
+	<classpathentry kind="lib" path="res/bcprov-jdk15on-153.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

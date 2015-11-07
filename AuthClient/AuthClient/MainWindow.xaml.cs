@@ -14,6 +14,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Math;
 
 namespace AuthClient
 {
@@ -23,9 +28,12 @@ namespace AuthClient
         byte[] bytes = new byte[1024];
         Socket senderSock;
 
+        int counterRaw = 0;
+
         //Information about current connection
         Connection con;
-
+        DHParameters dh,dh1;
+        BigInteger P, G;
         public MainWindow()
         {
             InitializeComponent();
@@ -117,7 +125,37 @@ namespace AuthClient
 
                 tbReceivedMsg.Text = "The server reply: " + "\"" + theMessageToReceive.Substring(0, theMessageToReceive.Length - 2) + "\"";
 
-                analyzeMessage(theMessageToReceive.Substring(0, theMessageToReceive.Length - 2));
+                if (counterRaw > 2)
+                {
+                    analyzeMessage(theMessageToReceive.Substring(0, theMessageToReceive.Length - 2));
+                }
+                else
+                {
+                    tbReceivedMsg.Text = "GOT P";
+                    byte[] msg = null;
+                    if(counterRaw == 1)
+                    {
+                        dh = GenerateParameters();
+                        G = new BigInteger(dh.G.ToString());
+                        msg = Encoding.ASCII.GetBytes(dh.G.ToString() + "\n");
+                    }
+                    else
+                    {
+                        P = new BigInteger(theMessageToReceive);
+                        dh1 = new DHParameters(P,G);
+                        AsymmetricCipherKeyPair d1 = GenerateKeys(dh1);
+
+                        msg = Encoding.ASCII.GetBytes(d1.Public.ToString() + "\n");
+                    }
+
+                    // Sends data to a connected Socket. 
+                    int bytesSend = senderSock.Send(msg);
+
+                    counterRaw = +1;
+                    ReceiveDataFromServer();
+
+
+                }
 
                 //if (theMessageToReceive.Substring(0,theMessageToReceive.Length-2) == "BYE")
                 //{
@@ -271,5 +309,55 @@ namespace AuthClient
             }
             catch (Exception exc) { MessageBox.Show(exc.ToString()); }
         }
+
+        public static DHParameters GenerateParameters()
+        {
+            var generator = new DHParametersGenerator();
+            generator.Init(256, 30, new SecureRandom());
+            return generator.GenerateParameters();
+        }
+
+        public string GetG(DHParameters parameters)
+        {
+            return parameters.G.ToString();
+        }
+
+        public static AsymmetricCipherKeyPair GenerateKeys(DHParameters parameters)
+        {
+            var keyGen = GeneratorUtilities.GetKeyPairGenerator("DH");
+            var kgp = new DHKeyGenerationParameters(new SecureRandom(), parameters);
+            keyGen.Init(kgp);
+            return keyGen.GenerateKeyPair();
+        }
+        // This returns A
+        public static string GetPublicKey(AsymmetricCipherKeyPair keyPair)
+        {
+            var dhPublicKeyParameters = keyPair.Public as DHPublicKeyParameters;
+            if (dhPublicKeyParameters != null)
+            {
+                return dhPublicKeyParameters.Y.ToString();
+            }
+            throw new NullReferenceException("The key pair provided is not a valid DH keypair.");
+        }
+
+        // This returns a
+        public static string GetPrivateKey(AsymmetricCipherKeyPair keyPair)
+        {
+            var dhPrivateKeyParameters = keyPair.Private as DHPrivateKeyParameters;
+            if (dhPrivateKeyParameters != null)
+            {
+                return dhPrivateKeyParameters.X.ToString();
+            }
+            throw new NullReferenceException("The key pair provided is not a valid DH keypair.");
+        }
+
+        public static BigInteger ComputeSharedSecret(string A, AsymmetricKeyParameter bPrivateKey, DHParameters internalParameters)
+        {
+            var importedKey = new DHPublicKeyParameters(new BigInteger(A), internalParameters);
+            var internalKeyAgree = AgreementUtilities.GetBasicAgreement("DH");
+            internalKeyAgree.Init(bPrivateKey);
+            return internalKeyAgree.CalculateAgreement(importedKey);
+        }
+
     }
 }
