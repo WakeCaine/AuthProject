@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="600.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.auth.client.main.MainController">
+   <children>
+      <TextField fx:id="ipBox" layoutX="38.0" layoutY="14.0" />
+      <Text layoutX="20.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP" />
+      <Button fx:id="connectButton" layoutX="200.0" layoutY="14.0" mnemonicParsing="false" onAction="#connectButtonAction" text="Connect" />
+      <TextArea fx:id="inputLogBox" layoutX="20.0" layoutY="72.0" prefHeight="226.0" prefWidth="200.0" />
+      <TextArea fx:id="clientLogBox" editable="false" layoutX="20.0" layoutY="317.0" prefHeight="264.0" prefWidth="200.0" />
+      <Text layoutX="27.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INPUT OUTPUT LOG" />
+      <Text layoutX="27.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CLIENT LOG" />
+      <TextField fx:id="loginBox" disable="true" layoutX="335.0" layoutY="14.0" />
+      <TextField fx:id="passBox" disable="true" layoutX="335.0" layoutY="43.0" />
+      <TextField fx:id="emailBox" disable="true" layoutX="335.0" layoutY="72.0" />
+      <TextField fx:id="keyBox" disable="true" layoutX="335.0" layoutY="103.0" />
+      <Text layoutX="296.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
+      <Text layoutX="275.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <Text layoutX="296.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <Text layoutX="300.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Key" />
+      <Button fx:id="loginButton" disable="true" layoutX="494.0" layoutY="14.0" mnemonicParsing="false" onAction="#registerButtonAction" text="Log/Register" />
+      <CheckBox fx:id="registerCheckBox" disable="true" layoutX="501.0" layoutY="55.0" mnemonicParsing="false" text="Register?" />
+      <TextArea fx:id="dataBox" editable="false" layoutX="235.0" layoutY="139.0" prefHeight="442.0" prefWidth="349.0" />
+      <Text layoutX="235.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data" />
+   </children>
+</AnchorPane>
