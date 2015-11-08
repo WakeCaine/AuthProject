@@ -4,6 +4,7 @@ public enum Status
 {
     IDLE,
     CONNECTED,
+    DIFFI,
     REGISTERED,
     LOGIN,
     LOGGED,

@@ -7,12 +7,6 @@ import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,9 +15,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
-
 import com.auth.server.model.DatabaseService;
 
 import javafx.scene.control.TextArea;
@@ -31,14 +22,10 @@ import javafx.scene.control.TextField;
 
 public class MyConnection extends Thread {
 
-	public static byte[] iv = new SecureRandom().generateSeed(16);
-	
-	public BigInteger p, g;
 	ServerSocket serverSocket;
 	Socket clientSocket;
 	PrintWriter out = null;
 	BufferedReader in = null;
-
 	
 	TextField statusBox;
 	TextArea databaseLog;
@@ -80,6 +67,7 @@ public class MyConnection extends Thread {
 			while (true) {
 				while ((inputLine = in.readLine()) != null) {
 					System.out.println("\"" + inputLine + "\"");
+					System.out.println(new BigInteger(inputLine));
 					if (inputLine.equals("|BYE")) {
 						statusBox.setText("CLOSED CONNECTION");
 						out.println("|3BYE");
@@ -150,21 +138,4 @@ public class MyConnection extends Thread {
         }
 		return false;
 	}
-
-	public static KeyPair generateECKeys() {
-        try {
-            ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec("brainpoolp256r1");
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
-                    "ECDH", "BC");
-
-            keyPairGenerator.initialize(parameterSpec);
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-           
-            return keyPair;
-        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
-                | NoSuchProviderException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

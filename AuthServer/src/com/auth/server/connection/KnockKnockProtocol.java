@@ -1,6 +1,7 @@
 package com.auth.server.connection;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -11,18 +12,19 @@ import com.auth.server.mail.MailSender;
 import javafx.scene.control.TextArea;
 
 public class KnockKnockProtocol {
-	private static final int AUTH = -1;
 	private static final int WAITING = 0;
 	private static final int SENTCONFIRMATION = 1;
-	private static final int SENTANSWER = 2;
-	private static final int SENTKEY = 3;
-	private static final int ANOTHER = 4;
+	private static final int DIFFIEHELLMAN = 2;
+	private static final int SENTANSWER = 3;
+	private static final int SENTKEY = 4;
+	private static final int ANOTHER = 5;
 
-	private static final int NUMJOKES = 5;
 
-	public int state = AUTH;
-	private int count = 0;
+	public int state = WAITING;
+	private int currentJoke = 0;
 
+	private int encryptionCounter = 0;
+	
 	MyConnection connection;
 	
 	private String[] clues = { "Turnip", "Little Old Lady", "Atch", "Who", "Who" };
@@ -38,15 +40,10 @@ public class KnockKnockProtocol {
 	
 	public String processInput(String theInput) {
 		String theOutput = null;
-		
-		if(count < 2){
-						
-		}
-		
 
 		if (state == WAITING) {
 			theOutput = "|5READY";
-			state = SENTCONFIRMATION;
+			state = DIFFIEHELLMAN;
 			System.out.println("SET STATE SENT");
 			return theOutput;
 		} 
@@ -54,6 +51,7 @@ public class KnockKnockProtocol {
 		int count = Character.getNumericValue(theInput.charAt(1));
 		String localInput = theInput.substring(2, 2 + count);
 		System.out.println("INPUT: '"+ localInput +"'");
+		System.out.println(new BigInteger(localInput));
 		if (theInput.charAt(0) != '|'){
             return "???";
 		} else if (state == SENTCONFIRMATION) {
@@ -114,9 +112,22 @@ public class KnockKnockProtocol {
 			}
 			
 		} else if (state == SENTANSWER) {
-			
+			System.out.println("IM AWAITING ANSWER?");
+			if (theInput.equalsIgnoreCase(clues[currentJoke] + " who?")) {
+				theOutput = answers[currentJoke] + " Want another? (y/n)";
+				state = ANOTHER;
+			} else {
+				theOutput = "You're supposed to say \"" + clues[currentJoke] + " who?\""
+						+ "! Try again. Knock! Knock!";
+				state = SENTCONFIRMATION;
+			}
 		} else if (state == ANOTHER) {
-			
+			System.out.println("FUCK HAPPEND");
+			if (theInput.equalsIgnoreCase("y")) {
+			} else {
+				theOutput = "Bye.";
+				state = WAITING;
+			}
 		}
 		System.out.println("Hell");
 		return theOutput;
