@@ -20,8 +20,8 @@ public class DatabaseService {
 	TextArea databaseLog;
 	
 	public DatabaseService(TextArea databaseLog) throws ClassNotFoundException, SQLException, IOException{
-		this.databaseLog = databaseLog;
-		/*Class.forName("org.sqlite.JDBC");
+		/*this.databaseLog = databaseLog;
+		Class.forName("org.sqlite.JDBC");
 		
 		con = DriverManager.getConnection("jdbc:sqlite:test1.db");
 		Statement statement = con.createStatement();

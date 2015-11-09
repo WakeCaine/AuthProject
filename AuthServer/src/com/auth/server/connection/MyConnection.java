@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.DriverManager;
@@ -15,6 +14,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.auth.server.main.MainController;
 import com.auth.server.model.DatabaseService;
 
 import javafx.scene.control.TextArea;
@@ -34,10 +34,13 @@ public class MyConnection extends Thread {
 	
 	DatabaseService  database;
 	
-	public MyConnection(TextField statusBox, TextArea databaseLog, DatabaseService database){
+	MainController main;
+	
+	public MyConnection(TextField statusBox, TextArea databaseLog, DatabaseService database, MainController main){
 		this.statusBox = statusBox;
 		this.databaseLog = databaseLog;
 		this.database = database;
+		this.main = main;
 	}
 	
 	@Override
@@ -56,19 +59,23 @@ public class MyConnection extends Thread {
 			System.out.println(e.getMessage());
 		}
 
-		String inputLine, outputLine;
+		String inputLine, outputLine = null;
 
 		// Initiate conversation with client
 		KnockKnockProtocol kkp = new KnockKnockProtocol(databaseLog, this);
-		outputLine = kkp.processInput(null);
+		try {
+			outputLine = kkp.processInput(null);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		out.println(outputLine);
 
 		try {
 			while (true) {
 				while ((inputLine = in.readLine()) != null) {
 					System.out.println("\"" + inputLine + "\"");
-					System.out.println(new BigInteger(inputLine));
-					if (inputLine.equals("|BYE")) {
+					if (inputLine.equals("|3BYE")) {
 						statusBox.setText("CLOSED CONNECTION");
 						out.println("|3BYE");
 						System.out.println("Closed");
@@ -88,10 +95,11 @@ public class MyConnection extends Thread {
 				outputLine = kkp.processInput(null);
 				out.println(outputLine);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		System.out.println("Closed thread");
 	}
 
@@ -127,6 +135,45 @@ public class MyConnection extends Thread {
 	        while(result.next()) {
 	        	System.out.println("KEY IN DATABASE: '" + result.getString(1) +"'");
 	            if(result.getString(1).equals(key))
+	            {
+	            	database.con.close();
+	            	return true;
+	            }
+	        }
+	        database.con.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+		return false;
+	}
+	
+	public List<String> findAllCon(){
+		try {
+			Class.forName("org.sqlite.JDBC");
+			database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+			long start = System.currentTimeMillis();
+			Statement prepStmt = database.con.createStatement();
+			List<String> keys = new LinkedList<String>();
+	        ResultSet result = prepStmt.executeQuery("SELECT name FROM contractor");
+	        while(result.next()) {
+	        	keys.add(result.getString(1));
+	        }
+	        database.con.close();
+	        return keys;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+		return null;
+	}
+	public boolean findUser(String user, String password){
+		try {
+			Class.forName("org.sqlite.JDBC");
+			database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+			Statement prepStmt = database.con.createStatement();
+	        ResultSet result = prepStmt.executeQuery("SELECT name, password FROM usr");
+	        while(result.next()) {
+	        	System.out.println("KEY IN DATABASE: '" + result.getString(1) +"'");
+	            if(result.getString(1).equals(user) && result.getString(2).equals(password))
 	            {
 	            	database.con.close();
 	            	return true;

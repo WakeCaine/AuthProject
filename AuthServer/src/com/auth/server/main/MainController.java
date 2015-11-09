@@ -48,6 +48,10 @@ public class MainController implements Initializable {
 	BufferedReader in = null;
 	File file;
 
+	public void setMyConnection(MyConnection myConnection){
+		my = myConnection;
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -64,7 +68,7 @@ public class MainController implements Initializable {
 			e.printStackTrace();
 		}
 		statusBox.setText("STARTING...");
-		my = new MyConnection(statusBox , databaseLog, database);
+		my = new MyConnection(statusBox , databaseLog, database,this);
 		my.start();
 	}
 
