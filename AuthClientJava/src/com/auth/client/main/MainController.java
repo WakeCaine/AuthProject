@@ -93,17 +93,30 @@ public class MainController implements Initializable {
 	}
 	
 	@FXML
+	private void getContractorDataAction(ActionEvent event){
+		clientLogBox.setText("Getting contractor list");
+		String message = "|6GETCON";
+		my.setStatus(Status.IDLE);
+		
+		try {
+			my.SendAndReceiveDataFromServer(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
 	private void registerButtonAction(ActionEvent event){
+		System.out.println("REGISTERBUTTON CLICKED");
 		if (my.getStatus() == Status.CONFIRM)
         {
             String message = "|3KEY" + "|KEY" + keyBox.getText();
 
             // Sends data to a connected Socket. 
-            out.println(message);
-
             try {
-				my.ReceiveDataFromServer();
-			} catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+            	my.SendAndReceiveDataFromServer(message);
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -112,12 +125,11 @@ public class MainController implements Initializable {
         {
             String message = "|5LOGIN" + "|" + loginBox.getText().length() + "USR" + loginBox.getText() + "|" + passBox.getText().length() + "PASS" + passBox.getText();
 
+            my.setStatus(Status.LOGIN);
             // Sends data to a connected Socket. 
-            out.println(message);
-
             try {
-				my.ReceiveDataFromServer();
-			} catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+            	my.SendAndReceiveDataFromServer(message);
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -126,13 +138,11 @@ public class MainController implements Initializable {
         {
             String message = "|8REGISTER" + "|" + loginBox.getText().length() + "USR" + loginBox.getText() + "|" + passBox.getText().length() + "PASS" + passBox.getText() + "|EMAIL" + emailBox.getText();
             // Sends data to a connected Socket. 
-            out.println(message);
-
             try {
-				my.ReceiveDataFromServer();
-			} catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+				my.SendAndReceiveDataFromServer(message);
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
         }
 	}

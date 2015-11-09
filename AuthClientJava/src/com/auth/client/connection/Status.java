@@ -11,5 +11,6 @@ public enum Status
     DISCONNECTED,
     BYE,
     ERROR,
-    MALFORMED
+    MALFORMED,
+    GOTDATA
 }
