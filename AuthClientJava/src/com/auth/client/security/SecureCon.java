@@ -92,7 +92,7 @@ public class SecureCon {
 				System.out.println("G: " + g);
 				System.out.println("P: " + p);
 				// Compute the cipher text = E(key,plainText)
-				byte[] ciphertext = c.doFinal("FUCKFUCKFUCKFUCK".getBytes());
+				byte[] ciphertext = c.doFinal("FUCKFUCKFUCKFUCK".getBytes(StandardCharsets.US_ASCII));
 				System.out.println("L: " + ciphertext.length);
 				// prints ciphertext
 				System.out.println("Encrypted: " + new String(ciphertext, "ascii"));

@@ -106,7 +106,7 @@ public class KnockKnockProtocol {
 		System.out.println("INPUT: '" + theInput + "'");
 		if (encryptionCounter == 3) {
 			System.out.println("HERE 3 ------------------------------------------------------------------------!");
-			byte[] stringer = Base64.getDecoder().decode(theInput);
+			byte[] stringer = Base64.getDecoder().decode(theInput.getBytes(StandardCharsets.US_ASCII));
 			System.out.println(stringer.length);
 			System.out.println(theInput);
 
@@ -246,7 +246,7 @@ public class KnockKnockProtocol {
 				String email = getEmailM(theInput.substring(2 + count + 1, theInput.length()));
 
 				try {
-					MailSender.SendEmail(hash, email);
+					MailSender.SendEmail("Your key: \n" + hash, email);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

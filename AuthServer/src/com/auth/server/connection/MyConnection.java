@@ -137,7 +137,7 @@ public class MyConnection extends Thread {
 			long start = System.currentTimeMillis();
 			Statement prepStmt = database.con.createStatement();
 			List<String> keys = new LinkedList<String>();
-	        ResultSet result = prepStmt.executeQuery("SELECT hash FROM key");
+	        ResultSet result = prepStmt.executeQuery("SELECT hash FROM key where (strftime('%s',datetime('now')) - strftime('%s',time)) < 600");
 	        while(result.next()) {
 	        	System.out.println("KEY IN DATABASE: '" + result.getString(1) +"'");
 	            if(result.getString(1).equals(key))

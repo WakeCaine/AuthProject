@@ -46,10 +46,26 @@ public class DatabaseService {
         start = System.currentTimeMillis();
         PreparedStatement prepStmt2 = conn2
                 .prepareStatement("INSERT INTO contractor(name) values (?);");
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 5; i++) {
             prepStmt2.setString(1, "someName" + i);
             prepStmt2.addBatch();
         }
+        
+        prepStmt2.setString(1, "KWK SP Z.O.O.");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "MAKLOWICZ PHU");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "ZBYS SA");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "LOWY WIES");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "EKSA SA");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "OLO Z.O.O.");
+        prepStmt2.addBatch();
+        prepStmt2.setString(1, "MONIKA SA");
+        prepStmt2.addBatch();
+        
         prepStmt2.executeBatch();
         conn2.commit();
         databaseLog.appendText("Time2: " + (System.currentTimeMillis() - start) + "\n");
