@@ -50,7 +50,7 @@ public class KnockKnockProtocol {
 
 	Cipher c;
 
-	private int encryptionCounter = 0;
+	public int encryptionCounter = 0;
 
 	MyConnection connection;
 

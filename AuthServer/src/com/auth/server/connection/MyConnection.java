@@ -79,6 +79,8 @@ public class MyConnection extends Thread {
 						statusBox.setText("CLOSED CONNECTION");
 						out.println("|3BYE");
 						System.out.println("Closed");
+						kkp.state = 0;
+						kkp.encryptionCounter = 0;
 						break;
 					}
 					outputLine = kkp.processInput(inputLine);
@@ -111,7 +113,7 @@ public class MyConnection extends Thread {
 
 	public void insertKey(String key) throws SQLException, ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
-		database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+		database.con = DriverManager.getConnection("jdbc:sqlite:test1.sqlite");
 		long start = System.currentTimeMillis();
 		PreparedStatement prepStmt = database.con.prepareStatement("INSERT INTO key(time,hash) values (datetime('now'),?);");
 		prepStmt.setString(1, key);
@@ -121,7 +123,7 @@ public class MyConnection extends Thread {
 	}
 	public void insertUsr(String uname, String password) throws SQLException, ClassNotFoundException{
 		Class.forName("org.sqlite.JDBC");
-		database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+		database.con = DriverManager.getConnection("jdbc:sqlite:test1.sqlite");
 		long start = System.currentTimeMillis();
 		PreparedStatement prepStmt = database.con.prepareStatement("INSERT INTO usr(name,password) values (?,?);");
 		prepStmt.setString(1, uname);
@@ -133,7 +135,7 @@ public class MyConnection extends Thread {
 	public boolean findKey(String key){
 		try {
 			Class.forName("org.sqlite.JDBC");
-			database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+			database.con = DriverManager.getConnection("jdbc:sqlite:test1.sqlite");
 			long start = System.currentTimeMillis();
 			Statement prepStmt = database.con.createStatement();
 			List<String> keys = new LinkedList<String>();
@@ -156,7 +158,7 @@ public class MyConnection extends Thread {
 	public List<String> findAllCon(){
 		try {
 			Class.forName("org.sqlite.JDBC");
-			database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+			database.con = DriverManager.getConnection("jdbc:sqlite:test1.sqlite");
 			long start = System.currentTimeMillis();
 			Statement prepStmt = database.con.createStatement();
 			List<String> keys = new LinkedList<String>();
@@ -174,7 +176,7 @@ public class MyConnection extends Thread {
 	public boolean findUser(String user, String password){
 		try {
 			Class.forName("org.sqlite.JDBC");
-			database.con = DriverManager.getConnection("jdbc:sqlite:test1.db");
+			database.con = DriverManager.getConnection("jdbc:sqlite:test1.sqlite");
 			Statement prepStmt = database.con.createStatement();
 	        ResultSet result = prepStmt.executeQuery("SELECT name, password FROM usr");
 	        while(result.next()) {
