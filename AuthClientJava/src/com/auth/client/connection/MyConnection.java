@@ -164,10 +164,11 @@ public class MyConnection extends Thread {
 		analyzeMessage(inputLine);
 	}
 	
-	public void SendAndReceiveDataFromServer(String input) throws IOException {
-		out.println(input);
+	public void SendAndReceiveDataFromServer(String input) throws Exception {
+		out.println(secureConnection.encryptMessage(input));
 		String inputLine = null;
 		inputLine = in.readLine();
+		inputLine = secureConnection.descryptMessage(inputLine);
 		mainController.inputLogBox.appendText("INPUT: \"" + inputLine + "\"\n");
 		analyzeMessage(inputLine);
 	}

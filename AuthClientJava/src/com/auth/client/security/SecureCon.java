@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -19,6 +20,7 @@ import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.DHPublicKeySpec;
@@ -108,6 +110,7 @@ public class SecureCon {
 
 			SecureRandom secureR = new SecureRandom();
 			secureR.nextBytes(secureRandom);
+			iv = secureRandom;
 			System.out.println("IV: " + secureRandom);
 			System.out.println("IV string: " + new String(secureRandom));
 			out.println(new String(secureRandom));
@@ -151,7 +154,70 @@ public class SecureCon {
 		}
 		return false;
 	}
+	
+	public String encryptMessage(String message) throws Exception{
+		c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		// Instantiate the Cipher of algorithm "DES"
+		// Computes secret keys for Alice (g^Y mod p)^X mod p == Bob
+		// (g^X
+		// mod p)^Y mod p
+		key1 = agreeSecretKey(clientPrivateKey, serverPublicKey, true);
+		// Instantiate the Cipher of algorithm "DES"
 
+		// Init the cipher with Alice's key1
+		System.out.println(key1.getEncoded().length);
+
+		IvParameterSpec ivSpec = new IvParameterSpec(secureRandom);
+		c.init(Cipher.ENCRYPT_MODE, key1, ivSpec);
+		System.out.println("SECRET KEY: " + key1);
+		System.out.println("MY PRIVATE KEY: " + clientPrivateKey);
+		System.out.println("SERVER PUBLIC KEY: " + serverPublicKey);
+		System.out.println("MY PUBLIC KEY: " + clientPublicKey);
+		System.out.println("G: " + g);
+		System.out.println("P: " + p);
+		// Compute the cipher text = E(key,plainText)
+		byte[] ciphertext = c.doFinal(message.getBytes(StandardCharsets.US_ASCII));
+		System.out.println("L: " + ciphertext.length);
+		// prints ciphertext
+		System.out.println("Encrypted: " + new String(ciphertext, "ascii"));
+		System.out.println(ciphertext.length);
+		return Base64.getEncoder().encodeToString(ciphertext);
+	}
+	
+	public String descryptMessage(String message) throws Exception{
+	
+		byte[] stringer = Base64.getDecoder().decode(message.getBytes(StandardCharsets.US_ASCII));
+		System.out.println(message);
+
+		// Computes secret keys for Alice (g^Y mod p)^X mod p == Bob (g^X
+		// mod p)^Y mod p
+	
+		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DiffieHellman");
+		DHParameterSpec param = new DHParameterSpec(p, g);
+		kpg.initialize(param);
+		keyPair = kpg.generateKeyPair();
+	
+		SecretKey key1 = agreeSecretKey(clientPrivateKey, serverPublicKey, true);
+		System.out.println("SECRET KEY " + key1);
+		System.out.println("MY PRIVATE KEY: " + clientPrivateKey);
+		System.out.println("MY PUBLIC KEY: " + clientPublicKey);
+		System.out.println("SERVER PUBLIC KEY: " + serverPublicKey);
+		System.out.println("G: " + g);
+		System.out.println("P: " + p);
+		// Instantiate the Cipher of algorithm "DES"
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		// Init the cipher with Alice's key1
+		System.out.println(key1.getEncoded().length);
+		// inits the encryptionMode
+		System.out.println("IV: " + iv);
+		IvParameterSpec ivSpec = new IvParameterSpec(iv);
+		c.init(Cipher.DECRYPT_MODE, key1,ivSpec);
+		// Decrypts and print
+		byte[] pad = c.doFinal(stringer);
+		System.out.println("Decrypted: " + new String(pad, "ascii"));
+		return new String(pad, "ascii");
+	}
+	
 	public static SecretKey agreeSecretKey(PrivateKey prk_self, PublicKey pbk_peer, boolean lastPhase)
 			throws Exception {
 		// instantiates and inits a KeyAgreement

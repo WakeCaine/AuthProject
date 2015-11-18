@@ -100,7 +100,7 @@ public class MainController implements Initializable {
 		
 		try {
 			my.SendAndReceiveDataFromServer(message);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -116,7 +116,7 @@ public class MainController implements Initializable {
             // Sends data to a connected Socket. 
             try {
             	my.SendAndReceiveDataFromServer(message);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -129,7 +129,7 @@ public class MainController implements Initializable {
             // Sends data to a connected Socket. 
             try {
             	my.SendAndReceiveDataFromServer(message);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -140,7 +140,7 @@ public class MainController implements Initializable {
             // Sends data to a connected Socket. 
             try {
 				my.SendAndReceiveDataFromServer(message);
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

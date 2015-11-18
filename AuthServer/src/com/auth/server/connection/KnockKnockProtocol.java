@@ -2,6 +2,7 @@ package com.auth.server.connection;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -40,11 +41,14 @@ public class KnockKnockProtocol {
 	PublicKey serverPublicKey;
 	PrivateKey serverPrivateKey;
 	KeyPair keyPair;
+	SecretKey key1;
 	byte[] iv;
 
 	public int state = WAITING;
 	private int currentJoke = 0;
 	public BigInteger p, g;
+
+	Cipher c;
 
 	private int encryptionCounter = 0;
 
@@ -99,7 +103,6 @@ public class KnockKnockProtocol {
 			return theOutput;
 		}
 
-		int count = Character.getNumericValue(theInput.charAt(1));
 		System.out.println("INPUT: '" + theInput + "'");
 		if (encryptionCounter == 3) {
 			System.out.println("HERE 3 ------------------------------------------------------------------------!");
@@ -128,10 +131,10 @@ public class KnockKnockProtocol {
 			System.out.println(key1.getEncoded().length);
 			// inits the encryptionMode
 			IvParameterSpec ivSpec = new IvParameterSpec(iv);
-			c.init(Cipher.DECRYPT_MODE, key1,ivSpec);
+			c.init(Cipher.DECRYPT_MODE, key1, ivSpec);
 			// Decrypts and print
 			byte[] pad = c.doFinal(stringer);
-			encryptionCounter +=1;
+			encryptionCounter += 1;
 			System.out.println("Decrypted: " + new String(pad, "ascii"));
 			System.out.println("Done");
 			state = SENTCONFIRMATION;
@@ -178,16 +181,16 @@ public class KnockKnockProtocol {
 			System.out.println("PUBLIC KEY : " + kspec.getY());
 			return kspec.getY().toString();
 
-		} else if (theInput.charAt(0) != '|') {
-			return "???";
-		} else if (state == SENTLOGCONFIRMATION){
+		} else if (state == SENTLOGCONFIRMATION) {
+			theInput = decryptMessage(theInput);
+			int count = Character.getNumericValue(theInput.charAt(1));
 			String localInput = theInput.substring(2, 2 + count);
-			
+
 			if (localInput.equalsIgnoreCase("GETCON")) {
 				List<String> contractor = connection.findAllCon();
-				if(contractor != null){
+				if (contractor != null) {
 					String message = "|4DATA";
-					for(String con : contractor){
+					for (String con : contractor) {
 						message += "|" + con;
 					}
 					return message;
@@ -196,16 +199,20 @@ public class KnockKnockProtocol {
 				}
 			}
 		} else if (state == SENTCONFIRMATION) {
+			theInput = decryptMessage(theInput);
+			int count = Character.getNumericValue(theInput.charAt(1));
+			System.out.println("\"" + theInput + "\"");
 			String localInput = theInput.substring(2, 2 + count);
+			System.out.println("\"" + localInput + "\"");
 			System.out.println("IM HERE1");
 			if (localInput.equalsIgnoreCase("LOGIN")) {
 				System.out.println("IM LOGING");
 				connection.uname = getUname(theInput.substring(2 + count + 1, theInput.length()));
 				connection.password = getPass(theInput.substring(2 + count + 1, theInput.length()));
-				
+
 				if (localInput.equalsIgnoreCase("LOGIN")) {
 					System.out.println("LOGGING: " + connection.uname + " " + connection.password);
-					if (connection.findUser(connection.uname,connection.password) == true) {
+					if (connection.findUser(connection.uname, connection.password) == true) {
 						theOutput = "|5OKLOG";
 						state = SENTLOGCONFIRMATION;
 						return theOutput;
@@ -215,7 +222,7 @@ public class KnockKnockProtocol {
 						return theOutput;
 					}
 				}
-				
+
 				theOutput = "|5OKLOG";
 				state = SENTANSWER;
 			} else if (localInput.equalsIgnoreCase("REGISTER")) {
@@ -247,6 +254,8 @@ public class KnockKnockProtocol {
 				state = SENTKEY;
 			}
 		} else if (state == SENTKEY) {
+			theInput = decryptMessage(theInput);
+			int count = Character.getNumericValue(theInput.charAt(1));
 			String localInput = theInput.substring(2, 2 + count);
 			int count1 = Character.getNumericValue(theInput.charAt(1));
 			String localInput1 = theInput.substring(5, theInput.length());
@@ -273,6 +282,7 @@ public class KnockKnockProtocol {
 			}
 
 		} else if (state == SENTANSWER) {
+			theInput = decryptMessage(theInput);
 			System.out.println("IM AWAITING ANSWER?");
 			if (theInput.equalsIgnoreCase(clues[currentJoke] + " who?")) {
 				theOutput = answers[currentJoke] + " Want another? (y/n)";
@@ -282,15 +292,79 @@ public class KnockKnockProtocol {
 				state = SENTCONFIRMATION;
 			}
 		} else if (state == ANOTHER) {
+			theInput = decryptMessage(theInput);
 			System.out.println("FUCK HAPPEND");
 			if (theInput.equalsIgnoreCase("y")) {
 			} else {
 				theOutput = "Bye.";
 				state = WAITING;
 			}
+		} else {
+			return "???";
 		}
 		System.out.println("Hell");
 		return theOutput;
+	}
+
+	public String encryptMessage(String message) throws Exception {
+		c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		// Instantiate the Cipher of algorithm "DES"
+		// Computes secret keys for Alice (g^Y mod p)^X mod p == Bob
+		// (g^X
+		// mod p)^Y mod p
+		key1 = agreeSecretKey(serverPrivateKey, clientPublicKey, true);
+		// Instantiate the Cipher of algorithm "DES"
+
+		// Init the cipher with Alice's key1
+		System.out.println(key1.getEncoded().length);
+
+		IvParameterSpec ivSpec = new IvParameterSpec(iv);
+		c.init(Cipher.ENCRYPT_MODE, key1, ivSpec);
+		System.out.println("SECRET KEY: " + key1);
+		System.out.println("MY PRIVATE KEY: " + serverPrivateKey);
+		System.out.println("CLIENT PUBLIC KEY: " + clientPublicKey);
+		System.out.println("MY PUBLIC KEY: " + serverPublicKey);
+		System.out.println("G: " + g);
+		System.out.println("P: " + p);
+		// Compute the cipher text = E(key,plainText)
+		byte[] ciphertext = c.doFinal(message.getBytes(StandardCharsets.US_ASCII));
+		System.out.println("L: " + ciphertext.length);
+		// prints ciphertext
+		System.out.println("Encrypted: " + new String(ciphertext, "ascii"));
+		System.out.println(ciphertext.length);
+		return Base64.getEncoder().encodeToString(ciphertext);
+	}
+
+	public String decryptMessage(String message) throws Exception {
+		byte[] stringer = Base64.getDecoder().decode(message.getBytes(StandardCharsets.US_ASCII));
+		System.out.println(message);
+
+		// Computes secret keys for Alice (g^Y mod p)^X mod p == Bob (g^X
+		// mod p)^Y mod p
+
+		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DiffieHellman");
+		DHParameterSpec param = new DHParameterSpec(p, g);
+		kpg.initialize(param);
+		keyPair = kpg.generateKeyPair();
+
+		SecretKey key1 = agreeSecretKey(serverPrivateKey, clientPublicKey, true);
+		System.out.println("SECRET KEY " + key1);
+		System.out.println("MY PRIVATE KEY: " + serverPrivateKey);
+		System.out.println("MY PUBLIC KEY: " + serverPublicKey);
+		System.out.println("CLIENT PUBLIC KEY: " + clientPublicKey);
+		System.out.println("G: " + g);
+		System.out.println("P: " + p);
+		// Instantiate the Cipher of algorithm "DES"
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		// Init the cipher with Alice's key1
+		System.out.println(key1.getEncoded().length);
+		// inits the encryptionMode
+		IvParameterSpec ivSpec = new IvParameterSpec(iv);
+		c.init(Cipher.DECRYPT_MODE, key1, ivSpec);
+		// Decrypts and print
+		byte[] pad = c.doFinal(stringer);
+		System.out.println("Decrypted: \"" + new String(pad, "ascii") +"\"");
+		return new String(pad, "ascii");
 	}
 
 	public String MD5(String md5) {
@@ -338,5 +412,13 @@ public class KnockKnockProtocol {
 		first = first.substring(6, 6 + count);
 		System.out.println("PASSWORD: " + first);
 		return first;
+	}
+	
+	public int getEncryptionCounter(){
+		return encryptionCounter;
+	}
+	
+	public void setEncryptionCounter(int set){
+		encryptionCounter = set;
 	}
 }

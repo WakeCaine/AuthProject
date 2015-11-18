@@ -82,6 +82,12 @@ public class MyConnection extends Thread {
 						break;
 					}
 					outputLine = kkp.processInput(inputLine);
+					if(kkp.getEncryptionCounter() == 4){
+						kkp.setEncryptionCounter(5);
+					}else if(kkp.getEncryptionCounter() > 4){
+						outputLine = kkp.encryptMessage(outputLine);
+					}
+					System.out.println("OUT: " + outputLine );
 					out.println(outputLine);
 				}
 
